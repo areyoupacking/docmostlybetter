@@ -8,7 +8,6 @@ import { MfaSetupModal } from "@/ee/mfa";
 import { MfaDisableModal } from "@/ee/mfa";
 import { MfaBackupCodesModal } from "@/ee/mfa";
 import { isCloud } from "@/lib/config.ts";
-import useLicense from "@/ee/hooks/use-license.tsx";
 import { ResponsiveSettingsRow, ResponsiveSettingsContent, ResponsiveSettingsControl } from "@/components/ui/responsive-settings-row";
 
 export function MfaSettings() {
@@ -17,7 +16,6 @@ export function MfaSettings() {
   const [setupModalOpen, setSetupModalOpen] = useState(false);
   const [disableModalOpen, setDisableModalOpen] = useState(false);
   const [backupCodesModalOpen, setBackupCodesModalOpen] = useState(false);
-  const { hasLicenseKey } = useLicense();
 
   const { data: mfaStatus, isLoading } = useQuery({
     queryKey: ["mfa-status"],
@@ -28,7 +26,7 @@ export function MfaSettings() {
     return null;
   }
 
-  const canUseMfa = isCloud() || hasLicenseKey;
+  const canUseMfa = isCloud();
 
   // Check if MFA is truly enabled
   const isMfaEnabled = mfaStatus?.isEnabled === true;

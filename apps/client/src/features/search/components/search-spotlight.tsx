@@ -7,7 +7,6 @@ import { searchSpotlightStore } from "../constants.ts";
 import { SearchSpotlightFilters } from "./search-spotlight-filters.tsx";
 import { useUnifiedSearch } from "../hooks/use-unified-search.ts";
 import { SearchResultItem } from "./search-result-item.tsx";
-import { useLicense } from "@/ee/hooks/use-license.tsx";
 import { isCloud } from "@/lib/config.ts";
 
 interface SearchSpotlightProps {
@@ -15,7 +14,6 @@ interface SearchSpotlightProps {
 }
 export function SearchSpotlight({ spaceId }: SearchSpotlightProps) {
   const { t } = useTranslation();
-  const { hasLicenseKey } = useLicense();
   const [query, setQuery] = useState("");
   const [debouncedSearchQuery] = useDebouncedValue(query, 300);
   const [filters, setFilters] = useState<{
@@ -44,7 +42,7 @@ export function SearchSpotlight({ spaceId }: SearchSpotlightProps) {
 
   // Determine result type for rendering
   const isAttachmentSearch =
-    filters.contentType === "attachment" && (hasLicenseKey || isCloud());
+    filters.contentType === "attachment" && (isCloud());
 
   const resultItems = (searchResults || []).map((result) => (
     <SearchResultItem
